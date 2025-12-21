@@ -1,4 +1,4 @@
---[[
+--[[ 1
 
 Made by RoadToGlory#9879
 Join: https://discord.gg/xu5dDS3Pb9
@@ -3785,9 +3785,11 @@ do
                         _self.Flags[info.Flag] = info.Min+((info.Max-info.Min)*percent)
                     end
                     if not info.AllowOutOfRange then
-                        _self.Flags[info.Flag] = math.clamp(_self.Flags[info.Flag],info.Min,info.Max)
+                        local numericVal = tonumber(_self.Flags[info.Flag]) or 0
+                        numericVal = math.clamp(numericVal, info.Min, info.Max)
+                        _self.Flags[info.Flag] = numericVal
                     end
-                    _self.Flags[info.Flag] = utility:FormatNumber(_self.Flags[info.Flag],info.Digits)
+                    local formatted = utility:FormatNumber(_self.Flags[info.Flag], info.Digits)
                     if dragging then
                         coroutine.wrap(info.Callback)(_self.Flags[info.Flag])
                     end
@@ -3795,7 +3797,7 @@ do
                     if lastFlag~=currentFlag then
                         inner.Size = UDim2.fromScale(math.clamp((currentFlag-info.Min)/(info.Max-info.Min),0,1),1)
                         lastFlag = currentFlag
-                        input.Text = currentFlag
+                        input.Text = formatted
                     end
                     lastMouseX = finalX
                     if _focused == false then
